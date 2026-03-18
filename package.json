@@ -1,14 +1,14 @@
 {
   "type": "module",
-  "name": "@aravinthan_p/appnest-ai-mcp",
+  "name": "@aravinthan_p/appnest-app-mcp",
   "description": "Bridges appnest with MCP tools so any MCP client can generate appnest app",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "build/server.js",
   "files": [
     "build"
   ],
   "bin": {
-    "appnest-ai-mcp": "./build/server.js"
+    "appnest-app-mcp": "./build/server.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
