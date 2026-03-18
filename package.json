@@ -1,0 +1,43 @@
+{
+  "type": "module",
+  "name": "@aravinthan_p/appnest-ai-mcp",
+  "description": "Bridges appnest with MCP tools so any MCP client can generate appnest app",
+  "version": "0.0.2",
+  "main": "build/server.js",
+  "files": [
+    "build"
+  ],
+  "bin": {
+    "appnest-ai-mcp": "./build/server.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "chmod 755 build/server.js",
+    "dev": "node build/server.js",
+    "inspect": "npx -y @modelcontextprotocol/inspector node build/server.js",
+    "start": "node build/server.js"
+  },
+  "keywords": [
+    "appnest",
+    "mcp",
+    "modelcontextprotocol"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.2",
+    "@types/js-yaml": "^4.0.9",
+    "adm-zip": "^0.5.16",
+    "dedent": "^1.6.0",
+    "dotenv": "^17.2.1",
+    "js-yaml": "^4.1.0",
+    "openai": "^5.12.1",
+    "remeda": "^2.32.0",
+    "sharp": "^0.33.5",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "cross-env": "7.0.3",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}

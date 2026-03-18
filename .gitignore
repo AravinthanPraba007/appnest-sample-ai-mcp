@@ -1,9 +1,8 @@
 # Dependencies
 node_modules/
 
-# Build outputs
+# Build outputs (build/ is tracked — MCP server + tools live in build/)
 dist/
-build/
 .vite/
 *.tsbuildinfo
 
