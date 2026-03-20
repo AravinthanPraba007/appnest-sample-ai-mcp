@@ -1,8 +1,8 @@
 {
   "type": "module",
-  "name": "@aravinthan_p/appnest-app-mcp",
+  "name": "@sparrowengg/appnest-app-mcp",
   "description": "Bridges appnest with MCP tools so any MCP client can generate appnest app",
-  "version": "0.0.3",
+  "version": "1.0.3",
   "main": "build/server.js",
   "files": [
     "build"

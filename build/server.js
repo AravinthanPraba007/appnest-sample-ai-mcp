@@ -11,11 +11,11 @@ import {
   hiAppnestToolCallback,
 } from './tools/hi_appnest.js';
 import {
-  cloneAppnestBasecodeToolName,
-  cloneAppnestBasecodeToolDescription,
-  cloneAppnestBasecodeToolSchema,
-  cloneAppnestBasecodeToolCallback,
-} from './tools/clone_appnest_basecode.js';
+  setupAppnestAppBasecodeToolName,
+  setupAppnestAppBasecodeToolDescription,
+  setupAppnestAppBasecodeToolSchema,
+  setupAppnestAppBasecodeToolCallback,
+} from './tools/setup_appnest_app_basecode.js';
 import {
   runAppnestEngineCommandToolName,
   runAppnestEngineCommandToolDescription,
@@ -23,11 +23,18 @@ import {
   runAppnestEngineCommandToolCallback,
 } from './tools/run_appnest_engine_command.js';
 import {
-  setupAppnestToolsToolName,
-  setupAppnestToolsToolDescription,
-  setupAppnestToolsToolSchema,
-  setupAppnestToolsToolCallback,
-} from './tools/setup_appnest_tools.js';
+  setupAppnestAiContextToolName,
+  setupAppnestAiContextToolDescription,
+  setupAppnestAiContextToolSchema,
+  setupAppnestAiContextToolCallback,
+} from './tools/setup_appnest_ai_context.js';
+import {
+  setupAppnestAppRuntimeToolName,
+  setupAppnestAppRuntimeToolDescription,
+  setupAppnestAppRuntimeToolSchema,
+  setupAppnestAppRuntimeToolCallback,
+} from './tools/setup_appnest_app_runtime.js';
+console.log('Appnest MCP v0.0.5');
 
 /**
  * Creates a callTool function so tools can invoke other tools by name.
@@ -64,10 +71,10 @@ try {
     withCallTool(server, hiAppnestToolCallback)
   );
   server.tool(
-    cloneAppnestBasecodeToolName,
-    cloneAppnestBasecodeToolDescription,
-    cloneAppnestBasecodeToolSchema,
-    cloneAppnestBasecodeToolCallback
+    setupAppnestAppBasecodeToolName,
+    setupAppnestAppBasecodeToolDescription,
+    setupAppnestAppBasecodeToolSchema,
+    setupAppnestAppBasecodeToolCallback
   );
   server.tool(
     runAppnestEngineCommandToolName,
@@ -76,10 +83,16 @@ try {
     runAppnestEngineCommandToolCallback
   );
   server.tool(
-    setupAppnestToolsToolName,
-    setupAppnestToolsToolDescription,
-    setupAppnestToolsToolSchema,
-    setupAppnestToolsToolCallback
+    setupAppnestAiContextToolName,
+    setupAppnestAiContextToolDescription,
+    setupAppnestAiContextToolSchema,
+    setupAppnestAiContextToolCallback
+  );
+  server.tool(
+    setupAppnestAppRuntimeToolName,
+    setupAppnestAppRuntimeToolDescription,
+    setupAppnestAppRuntimeToolSchema,
+    setupAppnestAppRuntimeToolCallback
   );
 
   const transport = new StdioServerTransport();

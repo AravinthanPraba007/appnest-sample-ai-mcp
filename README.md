@@ -1,6 +1,6 @@
-# Appnest AI MCP
+# Appnest App MCP
 
-Model Context Protocol (MCP) server that connects AI clients (Cursor, Claude Desktop, etc.) to **Appnest** workflows: scaffold base code, install tooling, and run the `appnest-engine` CLI.
+Model Context Protocol (MCP) server that connects AI clients (Cursor, Claude Desktop, etc.) to **Appnest** workflows: scaffold base code, install tooling, and run the `appnest-development-engine` CLI.
 
 ---
 
@@ -8,9 +8,9 @@ Model Context Protocol (MCP) server that connects AI clients (Cursor, Claude Des
 
 | Requirement | Details |
 |-------------|---------|
-| **Node.js** | 18+ (uses `fetch`, ESM). |
+| **Node.js** | **22+** (matches `appnest-development-engine` / Appnest app; uses `fetch`, ESM). |
 | **MCP client** | Any client that launches MCP over **stdio** (e.g. Cursor MCP config). |
-| **`appnest-engine`** | On `PATH`, for `run_appnest_command` and for **hi appnest** (precheck, install-packages). |
+| **`appnest-development-engine`** | On `PATH`, for `run_appnest_command` and for **hi appnest** (precheck, install-packages). Use **`setup_appnest_app_runtime`** to verify Node 22+ and install **`appnest-development-engine`** globally if missing. |
 | **Network** | Clone/setup tools download zips from GitHub (`appnest-sample-basecode`, `appnest-sample-tools`). |
 | **Project folder** | Run the MCP with **cwd = your Appnest project root**, or pass explicit paths where tools support it. |
 
@@ -25,16 +25,16 @@ Model Context Protocol (MCP) server that connects AI clients (Cursor, Claude Des
 ```json
 {
   "mcpServers": {
-    "appnest": {
-      "command": "node",
-      "args": ["/absolute/path/to/appnest-sample-ai-mcp/build/server.js"],
-      "cwd": "/absolute/path/to/your-appnest-project"
+    "appnest-app-mcp": {
+      "command": "npx",
+      "args": ["-y", "@sparrowengg/appnest-app-mcp"],
+      "transport": "stdio"
     }
   }
 }
 ```
 
-Use **`cwd`** so `hi appnest` clones into the intended folder and `appnest-engine` runs in the right tree.
+Use **`cwd`** so `hi appnest` clones into the intended folder and `appnest-development-engine` runs in the right tree.
 
 #### Why did clone go to a different folder (e.g. `appnest-base`)?
 
@@ -50,7 +50,7 @@ The MCP server only knows two things:
 1. **`npm install`** in this repo (so `@modelcontextprotocol/sdk` and deps resolve).
 2. **`build/server.js`** exists and is executable (`npm run build`).
 3. MCP **`cwd`** = the Appnest project directory (especially for **hi_appnest**).
-4. **`appnest-engine`** on `PATH` when using **run_appnest_command** / **hi_appnest** (on Windows, global npm CLIs usually work via the `exec` path used in code).
+4. **`appnest-development-engine`** on `PATH` when using **run_appnest_command** / **hi_appnest** (on Windows, global npm CLIs usually work via the `exec` path used in code).
 5. **Network** for clone/setup zips (GitHub).
 
 ---
@@ -59,10 +59,11 @@ The MCP server only knows two things:
 
 | Tool | Purpose |
 |------|---------|
-| **hi_appnest** | Full onboarding: clone basecode → `setup_appnest_tools` → precheck → install-packages. |
-| **clone_appnest_basecode** | Download & extract official base zip into `targetDir` (default: cwd). |
-| **setup_appnest_tools** | Refresh `appnest-tools/` from the sample tools repo. |
-| **run_appnest_command** | Runs `appnest-engine run <command>` with optional `workingDirectory`. Allowed: `precheck`, `install-packages`, `run-all`, `zip-app`. |
+| **hi_appnest** | Full onboarding: setup basecode → `setup_appnest_ai_context` → precheck → install-packages. |
+| **setup_appnest_app_basecode** | Download & extract official base zip into `targetDir` (default: cwd). Skips if the folder isn’t empty (allowed: `.cursor`, `.DS_Store`, `Thumbs.db`) unless **`force: true`**. |
+| **setup_appnest_ai_context** | Replace **`appnest-ai-context/`** (delete if present), then download & extract from the sample tools repo (`appnest-sample-tools` zip). |
+| **setup_appnest_app_runtime** | Ensures **Node.js 22+** (on macOS/Linux can install via **nvm** + official install script if MCP is on older Node), global **`appnest-development-engine`**, then **`appnest-development-engine app help`**. Needs network when installing. |
+| **run_appnest_command** | Runs `appnest-development-engine app` + subcommand with optional `workingDirectory`. Subcommands: **init**, **precheck**, **install-packages**, **start**, **pack**, **validate**, **ai-context**. Discover: `appnest-development-engine app`, `appnest-development-engine app help`, or `appnest-development-engine app -h`. |
 
 ---
 
@@ -102,4 +103,3 @@ npm run inspect  # MCP Inspector (optional)
 
 ## License / package
 
-Package name: `@aravinthan_p/appnest-ai-mcp`. Adjust `package.json` metadata as needed for your registry.

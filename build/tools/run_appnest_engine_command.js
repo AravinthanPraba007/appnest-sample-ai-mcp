@@ -5,21 +5,50 @@ import { z } from "zod";
 
 const execAsync = promisify(exec);
 
+const CLI_NAME = "appnest-development-engine";
+
+/** Subcommands after `appnest-development-engine app …` */
 export const runAppnestEngineCommandToolName = "run_appnest_command";
 
-export const runAppnestEngineCommandToolDescription =
-  "Run Appnest-engine CLI: precheck | install-packages | run-all | zip-app. Runs in the given working directory.";
+export const runAppnestEngineCommandToolDescription = `
+Runs \`appnest-development-engine app <command>\` in the given working directory.
 
-const ALLOWED_COMMANDS = ["precheck", "install-packages", "run-all", "zip-app"];
+Allowed \`command\` values (see also \`appnest-development-engine app help\`):
+- **init** — Set up the app project
+- **precheck** — Check Node.js (>=22) and paths
+- **install-packages** — Install npm packages in all engine packages
+- **start** — Start proxy (backend + frontends)
+- **pack** — Bundle frontends, then zip app folders into appnest-app-pack
+- **validate** — Validate app-backend, app-frontend, and manifest
+- **ai-context** — Download AI context to appnest-ai-context/
+`;
+
+const ALLOWED_COMMANDS = [
+  "init",
+  "precheck",
+  "install-packages",
+  "start",
+  "pack",
+  "validate",
+  "ai-context",
+];
 
 export const runAppnestEngineCommandToolSchema = {
   command: z
-    .enum(["precheck", "install-packages", "run-all", "zip-app"])
-    .describe("Appnest-engine subcommand"),
+    .enum([
+      "init",
+      "precheck",
+      "install-packages",
+      "start",
+      "pack",
+      "validate",
+      "ai-context",
+    ])
+    .describe("app subcommand: init | precheck | install-packages | start | pack | validate | ai-context"),
   workingDirectory: z
     .string()
     .optional()
-    .describe("Project root where appnest-engine should run. Defaults to cwd."),
+    .describe("Project root where appnest-development-engine should run. Defaults to cwd."),
 };
 
 /** MCP uses stdout for JSON-RPC — never use console.log in tools. */
@@ -48,13 +77,13 @@ export const runAppnestEngineCommandToolCallback = async ({
     let stderr = "";
     if (process.platform === "win32") {
       const { stdout: o, stderr: e } = await execAsync(
-        `appnest-engine run ${command}`,
+        `${CLI_NAME} app ${command}`,
         { cwd, maxBuffer, env }
       );
       stdout = o ?? "";
       stderr = e ?? "";
     } else {
-      const result = await execFile("appnest-engine", ["run", command], {
+      const result = await execFile(CLI_NAME, ["app", command], {
         cwd,
         maxBuffer,
         env,
@@ -64,7 +93,7 @@ export const runAppnestEngineCommandToolCallback = async ({
     }
     const out =
       [stdout, stderr].filter(Boolean).join("\n") ||
-      `(no output) appnest-engine run ${command}`;
+      `(no output) ${CLI_NAME} app ${command}`;
     return {
       content: [
         {

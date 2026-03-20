@@ -3,15 +3,15 @@ import path from "path";
 
 const hiAppnestToolName = "hi_appnest";
 const hiAppnestToolDescription =
-  'Call when the user greets Appnest ("hi appnest", "hey appnest", etc.). Runs: clone basecode → setup appnest-tools → precheck → install-packages.';
+  'Call when the user greets Appnest ("hi appnest", "hey appnest", etc.). Runs: setup basecode → setup appnest-ai-context → precheck → install-packages.';
 const hiAppnestToolSchema = {};
 
 const hiAppnestMessage = `
 👋 Welcome to Appnest AI MCP!
 
 I'll set up your Appnest project:
-1️⃣ Clone Appnest base project into this folder  
-2️⃣ Set up appnest-tools  
+1️⃣ Set up Appnest base project in this folder  
+2️⃣ Set up appnest-ai-context  
 3️⃣ Run Appnest precheck  
 4️⃣ Install packages  
 
@@ -45,27 +45,27 @@ async function hiAppnestToolCallback(_args, { callTool }) {
     fs.mkdirSync(cursorDir, { recursive: true });
   }
 
-  const clone = await callTool("clone_appnest_basecode", { targetDir: projectRoot });
-  const cloneOut = parseToolOutput(clone);
-  if (cloneOut.text.includes("❌") || cloneOut.text.toLowerCase().includes("failed")) {
+  const basecode = await callTool("setup_appnest_app_basecode", { targetDir: projectRoot });
+  const basecodeOut = parseToolOutput(basecode);
+  if (basecodeOut.text.includes("❌") || basecodeOut.text.toLowerCase().includes("failed")) {
     return {
       content: [
         {
           type: "text",
-          text: `${hiAppnestMessage.trim()}\n\n❌ Clone step failed.\n\n${cloneOut.text}\n\nFix the issue and run **hi appnest** again.`,
+          text: `${hiAppnestMessage.trim()}\n\n❌ Basecode setup step failed.\n\n${basecodeOut.text}\n\nFix the issue and run **hi appnest** again.`,
         },
       ],
     };
   }
 
-  const setup = await callTool("setup_appnest_tools", { projectRoot });
+  const setup = await callTool("setup_appnest_ai_context", { projectRoot });
   const setupText = setup?.content?.[0]?.text ?? "";
   if (setupText.includes("❌") || setupText.toLowerCase().includes("failed")) {
     return {
       content: [
         {
           type: "text",
-          text: `${hiAppnestMessage.trim()}\n\n❌ appnest-tools setup failed.\n\n${setupText}\n\nFix the issue (network, disk, or paths) and run **hi appnest** again.`,
+          text: `${hiAppnestMessage.trim()}\n\n❌ appnest-ai-context setup failed.\n\n${setupText}\n\nFix the issue (network, disk, or paths) and run **hi appnest** again.`,
         },
       ],
     };
@@ -97,7 +97,7 @@ async function hiAppnestToolCallback(_args, { callTool }) {
       content: [
         {
           type: "text",
-          text: `${hiAppnestMessage.trim()}\n\n⚠️ Precheck passed but install-packages had problems.\n\n${inst.text}\n\nFix dependencies or PATH, then run **hi appnest** again or run \`appnest-engine run install-packages\` manually.`,
+          text: `${hiAppnestMessage.trim()}\n\n⚠️ Precheck passed but install-packages had problems.\n\n${inst.text}\n\nFix dependencies or PATH, then run **hi appnest** again or run \`appnest-development-engine app install-packages\` manually.`,
         },
       ],
     };
@@ -107,7 +107,7 @@ async function hiAppnestToolCallback(_args, { callTool }) {
     content: [
       {
         type: "text",
-        text: `${hiAppnestMessage.trim()}\n\n🎉 Appnest project setup completed!\n\n📦 ${cloneOut.text.split("\n").find((l) => l.trim()) || "Project ready"}\n📂 appnest-tools updated\n🔍 Precheck OK\n⚙️ Packages installed\n\nYou can start building with Appnest.`,
+        text: `${hiAppnestMessage.trim()}\n\n🎉 Appnest project setup completed!\n\n📦 ${basecodeOut.text.split("\n").find((l) => l.trim()) || "Project ready"}\n📂 appnest-ai-context ready\n🔍 Precheck OK\n⚙️ Packages installed\n\nYou can start building with Appnest.`,
       },
     ],
   };
