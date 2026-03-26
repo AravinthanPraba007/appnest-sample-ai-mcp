@@ -1,6 +1,6 @@
 # Appnest App MCP
 
-Model Context Protocol (MCP) server that connects AI clients (Cursor, Claude Desktop, etc.) to **Appnest** workflows: scaffold base code, install tooling, and run the `appnest-development-engine` CLI.
+Model Context Protocol (MCP) server for **Appnest App** projects: scaffold base code, set up AI context, validate runtime prerequisites, and run the `appnest-development-engine` CLI workflows.
 
 ---
 
@@ -76,28 +76,6 @@ npm run inspect  # MCP Inspector (optional)
 ```
 
 **Note:** The MCP server and tools live under `build/`, which is **tracked in git** so clones include a runnable server. Run `npm run build` after edits if you change `server.js` shebang/permissions.
-
----
-
-## Issues found & fixes applied
-
-| Issue | Severity | Fix |
-|-------|----------|-----|
-| **`console.log` in `run_appnest_command`** | **Critical** | MCP stdio transport uses **stdout** for JSON-RPC. Logging to stdout **breaks** the protocol. Removed; use stderr only if needed. |
-| **Wrong zip extract folder name** | **High** | Code expected `appnest-basecode-main` but the repo zip expands to **`appnest-sample-basecode-main`**. Clone failed or behaved randomly. Now resolves the extracted folder dynamically. |
-| **`hi_appnest` called clone with `{}`** | **High** | `targetDir` was required; validation failed. `targetDir` is now optional (defaults to cwd); `hi_appnest` passes explicit `projectRoot`. |
-| **`run_appnest` schema** | **Medium** | Mixed JSON-Schema-style shape vs Zod (used elsewhere). Normalized to **Zod** + strict allowed commands (**command injection** hardening). |
-| **`precheck.exitCode`** | **Medium** | Tool results had no `exitCode`. Precheck failure detection was unreliable. Engine command now appends `__MCP_EXIT_CODE__:<n>` for parsing. |
-| **`sendEvent` in clone catch** | **Medium** | MCP callbacks may not provide `sendEvent`; could throw. Now optional (`sendEvent?.(...)`). |
-| **`npm run build` / `dev`** | **Medium** | `tsc` + `src/server.ts` were referenced but no `tsconfig` / `src` in tree. Scripts now match the **JS `build/`** layout. |
-| **`bin`: `appnest-ai-mcp`** | — | After `npm i -g` or via `npx`, you can run `appnest-ai-mcp` instead of `node build/server.js`. |
-
-### Remaining / architectural notes
-
-1. **`server._registeredTools`** — Private SDK surface for `callTool` chaining; may break on SDK upgrades. Prefer official APIs if the SDK adds tool-to-tool invocation.
-2. **Dependencies** — `openai`, `sharp`, `remeda` may be unused by current tools; trim when you confirm.
-3. **Non-empty `targetDir`** — Cloning into a folder that already has files can cause rename collisions; prefer empty project roots for first-time setup.
-4. **`build/`** — Tracked in the repo so `git clone` includes the MCP server.
 
 ---
 
