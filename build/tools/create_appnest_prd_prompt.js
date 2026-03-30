@@ -12,6 +12,10 @@ export const createAppnestPrdPromptToolName = "create_appnest_prd_prompt";
 export const createAppnestPrdPromptToolDescription = `
 Builds **one prompt block for the AI editor**: loads **appnest-ai-context/appnest-prd-generator/prd-generation-workflow.md** from the project, tags that path, embeds the full workflow file, then appends the user's **sample PRD** text.
 
+**When to use:** Call when the user asks for an Appnest PRD, PRD generation, drafting a PRD from an idea, or output aligned with **app-prd-ai-doc** (numbered sections such as 01–11). Prefer this tool over inventing PRD structure so the embedded workflow drives the official process.
+
+**Does not do:** Does **not** write markdown files or fill **app-prd-ai-doc/01–11** (or equivalents). The editor or agent must still run the embedded workflow (e.g. Step 2 onward) to produce the filled PRD documents.
+
 If the workflow file is missing, run **setup_appnest_ai_context** on the same **projectRoot** first.
 `;
 

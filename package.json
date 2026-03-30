@@ -2,7 +2,7 @@
   "type": "module",
   "name": "@sparrowengg/appnest-app-mcp",
   "description": "Bridges appnest with MCP tools so any MCP client can generate appnest app",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "build/server.js",
   "files": [
     "build"
