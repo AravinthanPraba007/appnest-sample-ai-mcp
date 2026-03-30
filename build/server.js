@@ -34,6 +34,12 @@ import {
   setupAppnestAppRuntimeToolSchema,
   setupAppnestAppRuntimeToolCallback,
 } from './tools/setup_appnest_app_runtime.js';
+import {
+  createAppnestPrdPromptToolName,
+  createAppnestPrdPromptToolDescription,
+  createAppnestPrdPromptToolSchema,
+  createAppnestPrdPromptToolCallback,
+} from './tools/create_appnest_prd_prompt.js';
 console.log('Appnest MCP v0.0.5');
 
 /**
@@ -93,6 +99,12 @@ try {
     setupAppnestAppRuntimeToolDescription,
     setupAppnestAppRuntimeToolSchema,
     setupAppnestAppRuntimeToolCallback
+  );
+  server.tool(
+    createAppnestPrdPromptToolName,
+    createAppnestPrdPromptToolDescription,
+    createAppnestPrdPromptToolSchema,
+    createAppnestPrdPromptToolCallback
   );
 
   const transport = new StdioServerTransport();

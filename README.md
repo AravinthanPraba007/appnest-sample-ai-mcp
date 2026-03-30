@@ -62,6 +62,7 @@ The MCP server only knows two things:
 | **hi_appnest** | Full onboarding: setup basecode → `setup_appnest_ai_context` → precheck → install-packages. |
 | **setup_appnest_app_basecode** | Download & extract official base zip into `targetDir` (default: cwd). Skips if the folder isn’t empty (allowed: `.cursor`, `.DS_Store`, `Thumbs.db`) unless **`force: true`**. |
 | **setup_appnest_ai_context** | Replace **`appnest-ai-context/`** (delete if present), then download & extract from the sample tools repo (`appnest-sample-tools` zip). |
+| **create_appnest_prd_prompt** | Reads **`appnest-ai-context/appnest-prd-generator/prd-generation-workflow.md`**, tags its path, embeds the file, and appends **`samplePrd`** for the AI editor (requires AI context setup first). |
 | **setup_appnest_app_runtime** | Ensures **Node.js 22+** (on macOS/Linux can install via **nvm** + official install script if MCP is on older Node), global **`appnest-development-engine`**, then **`appnest-development-engine app help`**. Needs network when installing. |
 | **run_appnest_command** | Runs `appnest-development-engine app` + subcommand with optional `workingDirectory`. Subcommands: **init**, **precheck**, **install-packages**, **start**, **pack**, **validate**, **ai-context**. Discover: `appnest-development-engine app`, `appnest-development-engine app help`, or `appnest-development-engine app -h`. |
 
