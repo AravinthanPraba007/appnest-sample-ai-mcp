@@ -40,7 +40,7 @@ import {
   createAppnestPrdPromptToolSchema,
   createAppnestPrdPromptToolCallback,
 } from './tools/create_appnest_prd_prompt.js';
-console.log('Appnest MCP v0.0.5');
+console.error('Appnest MCP v0.0.5');
 
 /**
  * Creates a callTool function so tools can invoke other tools by name.
