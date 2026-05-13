@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { config } from 'dotenv';
-config();
+// MCP stdio transport: stdout must be JSON-RPC only. dotenv v17+ logs to stdout unless quiet.
+config({ quiet: true });
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
@@ -40,7 +41,6 @@ import {
   createAppnestPrdPromptToolSchema,
   createAppnestPrdPromptToolCallback,
 } from './tools/create_appnest_prd_prompt.js';
-console.error('Appnest MCP v0.0.5');
 
 /**
  * Creates a callTool function so tools can invoke other tools by name.
@@ -113,6 +113,5 @@ try {
   process.on('SIGINT', () => process.exit(0));
   process.on('SIGTERM', () => process.exit(0));
 } catch (error) {
-  console.error('Appnest MCP Error', error);
   process.exit(1);
 }
